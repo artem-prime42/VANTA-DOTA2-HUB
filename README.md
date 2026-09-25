@@ -92,7 +92,9 @@ The Windows installer offers an optional desktop shortcut, creates a Start Menu 
 
 Packaged builds use `electron-updater` with GitHub Releases as the update provider. When automatic checks are enabled, VANTA checks on startup and every six hours. Update downloads and restart actions are presented in the application. Automatic checking can be disabled in Settings.
 
-To publish a platform release from a release environment, use `npm run release:win` or `npm run release:linux`. These commands publish artifacts and require a `GH_TOKEN` with permission to create releases in the configured GitHub repository. Do not use them for ordinary local builds. Non-publishing build commands generate updater metadata locally.
+Pushing a new version on `main`—with the version updated in both `package.json` and `package-lock.json`—automatically builds the Windows installer and Linux AppImage, then publishes them together as a GitHub Release. The release includes generated notes based on the commits since the previous release and the updater metadata required by `electron-updater`. Existing versions are detected by tag and are not published twice. GitHub Actions uses its repository token for publication; no personal access token is needed for the automated workflow.
+
+For a manual platform release from a release environment, use `npm run release:win` or `npm run release:linux`. These commands publish artifacts and require a `GH_TOKEN` with permission to create releases in the configured GitHub repository. Do not use them for ordinary local builds. Non-publishing build commands generate updater metadata locally.
 
 GitHub Actions runs the checks and build workflows on pushes to `main` and can also be started manually. The workflows install the locked dependencies, run the syntax check and tests, build the platform package, verify update metadata, and upload the package as a workflow artifact. The Windows workflow also checks the installer and uninstall lifecycle, including preservation of user data.
 

@@ -1,0 +1,201 @@
+name: Build and publish release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - package-lock.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  detect-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      should_release: ${{ steps.version.outputs.should_release }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check whether this version was already released
+        id: version
+        shell: bash
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid stable release version: $version" >&2
+            exit 1
+          fi
+          tag="v$version"
+          git fetch --force --tags origin
+          if git rev-parse --quiet --verify "refs/tags/$tag" >/dev/null; then
+            should_release=false
+            echo "Release $tag already exists; skipping."
+          else
+            should_release=true
+            echo "Preparing release $tag."
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "should_release=$should_release" >> "$GITHUB_OUTPUT"
+
+  build-linux:
+    needs: detect-version
+    if: needs.detect-version.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check source and tests
+        run: |
+          npm run check
+          npm test
+
+      - name: Build Linux AppImage
+        run: npm run build:linux
+
+      - name: Verify Linux updater metadata
+        shell: bash
+        run: |
+          version="${{ needs.detect-version.outputs.version }}"
+          test -f "dist/VANTA-${version}.AppImage"
+          test -f dist/latest-linux.yml
+          grep -Eq "^version: ${version}$" dist/latest-linux.yml
+          grep -Eq '^sha512: [^[:space:]]+$' dist/latest-linux.yml
+          grep -Eq '^path: [^[:space:]]+$' dist/latest-linux.yml
+
+      - name: Upload Linux release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: vanta-linux-${{ needs.detect-version.outputs.version }}
+          path: |
+            dist/VANTA-*.AppImage
+            dist/latest-linux.yml
+          if-no-files-found: error
+
+  build-windows:
+    needs: detect-version
+    if: needs.detect-version.outputs.should_release == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Use HTTPS for GitHub dependencies
+        shell: bash
+        run: |
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check source and tests
+        run: |
+          npm run check
+          npm test
+
+      - name: Build Windows installer
+        run: npm run build:win
+
+      - name: Verify Windows updater metadata
+        shell: pwsh
+        run: |
+          $version = node -p "require('./package.json').version"
+          $installer = Get-ChildItem "dist/VANTA-Setup-$version.exe" | Select-Object -First 1
+          if (!$installer) { throw "Windows installer was not generated" }
+          if (!(Test-Path "dist/latest.yml")) { throw "latest.yml was not generated" }
+          if (!(Get-ChildItem "dist/VANTA-Setup-*.blockmap")) { throw "Windows blockmap was not generated" }
+          $metadata = Get-Content "dist/latest.yml" -Raw
+          if ($metadata -notmatch "version: $version") { throw "latest.yml has an unexpected version" }
+          if ($metadata -notmatch "sha512:\s+\S+") { throw "latest.yml has no sha512" }
+          if ($metadata -notmatch "path:\s+\S+") { throw "latest.yml has no artifact path" }
+
+      - name: Verify installer and data-preserving uninstall
+        shell: pwsh
+        run: |
+          $installer = (Resolve-Path "dist/VANTA-Setup-*.exe").Path
+          $installDir = Join-Path $env:RUNNER_TEMP "VANTA-install"
+          $userDataDir = Join-Path $env:APPDATA "VANTA"
+          Remove-Item $installDir -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item $userDataDir -Recurse -Force -ErrorAction SilentlyContinue
+          Start-Process -FilePath $installer -ArgumentList "/S", "/D=$installDir" -Wait
+          if (!(Test-Path (Join-Path $installDir "VANTA.exe"))) { throw "VANTA.exe was not installed" }
+          $uninstaller = Join-Path $installDir "Uninstall VANTA.exe"
+          if (!(Test-Path $uninstaller)) { throw "Uninstaller was not generated" }
+          New-Item $userDataDir -ItemType Directory -Force | Out-Null
+          Set-Content (Join-Path $userDataDir "lifecycle-marker.txt") "preserve"
+          Get-Process VANTA -ErrorAction SilentlyContinue | Stop-Process -Force
+          Start-Process -FilePath $uninstaller -ArgumentList "/S" -Wait
+          if (Test-Path $installDir) { throw "Install directory still exists after uninstall" }
+          if (!(Test-Path (Join-Path $userDataDir "lifecycle-marker.txt"))) { throw "User data was removed during uninstall" }
+
+      - name: Upload Windows release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: vanta-windows-${{ needs.detect-version.outputs.version }}
+          path: |
+            dist/VANTA-Setup-*.exe
+            dist/VANTA-Setup-*.blockmap
+            dist/latest.yml
+          if-no-files-found: error
+
+  publish-release:
+    needs:
+      - detect-version
+      - build-linux
+      - build-windows
+    if: needs.detect-version.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download Linux release assets
+        uses: actions/download-artifact@v4
+        with:
+          name: vanta-linux-${{ needs.detect-version.outputs.version }}
+          path: release-assets
+
+      - name: Download Windows release assets
+        uses: actions/download-artifact@v4
+        with:
+          name: vanta-windows-${{ needs.detect-version.outputs.version }}
+          path: release-assets
+
+      - name: Create GitHub release with generated patch notes
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.detect-version.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: VANTA ${{ needs.detect-version.outputs.version }}
+          generate_release_notes: true
+          files: release-assets/*
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
