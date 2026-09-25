@@ -26,6 +26,15 @@ test('electron updater and publish metadata are configured without renderer vers
   assert.match(settings, /state\.data\.appVersion/);
 });
 
+test('package builds do not publish implicitly while release builds publish explicitly', async () => {
+  const pkg = await readJson('package.json');
+  for (const script of ['build', 'build:win', 'build:win:linux-smoke', 'build:linux', 'build:local']) {
+    assert.match(pkg.scripts[script], /--publish never(?:\s|$)/, `${script} must not publish from CI`);
+  }
+  assert.match(pkg.scripts['release:win'], /--publish always(?:\s|$)/);
+  assert.match(pkg.scripts['release:linux'], /--publish always(?:\s|$)/);
+});
+
 test('generated updater metadata matches the current release when build artifacts exist', async () => {
   const pkg = await readJson('package.json');
   for (const name of ['latest.yml', 'latest-linux.yml']) {
