@@ -1,0 +1,1 @@
+.library-sort-control { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 11px; }.library-sort-select { padding: 8px 10px; color: var(--text); border: 1px solid #444; border-radius: 5px; background: #1b1b1b; outline: 0; }.library-sort-select:focus { border-color: #aaa; }

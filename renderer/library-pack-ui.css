@@ -1,0 +1,19 @@
+.pack-row { display: flex; align-items: center; gap: 12px; }
+.pack-row-icon { display: grid; flex: 0 0 42px; place-items: center; width: 42px; height: 42px; color: #111; border-radius: 6px; background: #ddd; font-size: 20px; }
+.pack-row-info { display: grid; min-width: 0; gap: 4px; }
+.pack-row-info strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pack-row-info small, .pack-content-count { color: var(--muted); font-size: 11px; }
+.pack-row-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+.pack-content-dialog { width: min(760px, calc(100vw - 36px)); max-height: min(760px, calc(100vh - 36px)); padding: 0; overflow: hidden; color: var(--text); border: 1px solid #555; border-radius: 8px; background: #151515; box-shadow: 0 25px 80px #000c; }
+.pack-content-dialog::backdrop { background: #000b; }
+.pack-content-body { max-height: min(760px, calc(100vh - 36px)); overflow: auto; padding: 32px; }
+.pack-content-body h2 { margin: 0 0 5px; font: 600 25px 'Space Grotesk'; }
+.pack-content-count { margin: 0 0 18px; }
+.pack-mod-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.pack-mod-card { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 9px; border: 1px solid var(--line); border-radius: 6px; background: #202020; }
+.pack-mod-card img, .pack-mod-card-empty { flex: 0 0 48px; width: 48px; height: 48px; object-fit: cover; border-radius: 4px; background: #303030; }
+.pack-mod-card-empty { display: grid; place-items: center; color: #888; }
+.pack-mod-card > div:last-child { display: grid; min-width: 0; gap: 4px; }
+.pack-mod-card strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.pack-mod-card small { overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; font-size: 10px; }
+@media (max-width: 780px) { .pack-row { align-items: flex-start; flex-wrap: wrap; }.pack-row-actions { flex: 0 0 100%; margin-left: 54px; }.pack-content-body { padding: 22px; } }

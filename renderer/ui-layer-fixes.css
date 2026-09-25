@@ -1,0 +1,4 @@
+#toast { z-index: 1000 !important; pointer-events: none; }
+.library-bulk { bottom: 48px !important; z-index: 950 !important; }
+.library-mod-actions { flex: 0 0 auto; min-width: 185px; justify-content: flex-end; }
+.library-mod-actions .toggle-button, .external-file-controls .toggle-button { display: inline-flex; align-items: center; justify-content: center; min-height: 30px; padding: 6px 12px; border-radius: 999px; font-weight: 600; line-height: 1; }

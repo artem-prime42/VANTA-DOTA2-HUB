@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VANTA DOTA2 HUB</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="motion.css" />
+    <link rel="stylesheet" href="featured.css" />
+    <link rel="stylesheet" href="navigation.css" />
+    <link rel="stylesheet" href="home.css" />
+    <link rel="stylesheet" href="polish.css" />
+    <link rel="stylesheet" href="library.css" />
+    <link rel="stylesheet" href="library-filters.css" />
+    <link rel="stylesheet" href="external.css" />
+    <link rel="stylesheet" href="card-polish.css" />
+    <link rel="stylesheet" href="external-controls.css" />
+    <link rel="stylesheet" href="library-controls.css" />
+    <link rel="stylesheet" href="library-bulk.css" />
+    <link rel="stylesheet" href="merge-pack.css" />
+    <link rel="stylesheet" href="library-pack-ui.css" />
+    <link rel="stylesheet" href="library-toolbar.css" />
+    <link rel="stylesheet" href="ui-layer-fixes.css" />
+    <link rel="stylesheet" href="visual-polish.css" />
+    <link rel="stylesheet" href="hero-multifilter.css" />
+    <link rel="stylesheet" href="hero-neutral.css" />
+    <link rel="stylesheet" href="card-state.css" />
+    <link rel="stylesheet" href="rarity-ui.css" />
+    <link rel="stylesheet" href="preview-controls.css" />
+    <link rel="stylesheet" href="video-preview-custom.css" />
+    <link rel="stylesheet" href="guides.css" />
+    <link rel="stylesheet" href="hero-grids.css" />
+  </head>
+  <body>
+    <header class="titlebar">
+      <div class="titlebar-brand"><strong>VANTA DOTA2 HUB</strong></div>
+      <nav class="top-nav" aria-label="Catalog sections">
+        <button class="top-tab" data-top="heroes" data-i18n>Heroes</button>
+        <button class="top-tab" data-top="world" data-i18n>World</button>
+        <button class="top-tab" data-top="interface" data-i18n>Interface</button>
+        <button class="top-tab" data-top="effects" data-i18n>Effects</button>
+        <button class="top-tab" data-top="other" data-i18n>Other</button>
+      </nav>
+      <div class="window-actions"><button id="window-minimize" title="Minimize" data-i18n-title="catalog.windowMinimize">−</button><button id="window-maximize" title="Maximize" data-i18n-title="catalog.windowMaximize">□</button><button id="window-close" class="window-close" title="Close" data-i18n-title="catalog.windowClose">×</button></div>
+    </header>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <nav id="nav" class="nav" aria-label="Primary navigation">
+          <button class="nav-item active" data-view="discover"><span>⌂</span><span data-i18n="nav.home">Home</span></button>
+          <button class="nav-item" data-view="mods"><span>◈</span><span data-i18n="nav.mods">Mods</span></button>
+          <button class="nav-item" data-view="installed"><span>▦</span><span data-i18n="nav.library">Library</span></button>
+          <button class="nav-item" data-view="saved-packs"><span>▣</span><span data-i18n="nav.savedPacks">Packs</span></button>
+          <button class="nav-item" data-view="authors"><span>◉</span><span data-i18n="nav.authors">Authors</span></button>
+          <button class="nav-item" data-view="guides"><span>▤</span><span data-i18n="nav.guides">Guides</span></button>
+          <button class="nav-item" data-view="hero-grids"><span>▥</span><span data-i18n="nav.heroGrids">Hero Grids</span></button>
+        </nav>
+        <div class="sidebar-bottom"><button class="nav-item" data-view="settings"><span>⚙</span><span data-i18n="nav.settings">Settings</span></button></div>
+        <div id="game-status" class="game-status"><span id="sidebar-status-dot" class="status-dot"></span><span id="sidebar-status-text"></span></div>
+      </aside>
+      <main class="main-content">
+        <header class="topbar"><div><h1 id="page-title">Home</h1></div><div class="top-actions"><label class="search"><span>⌕</span><input id="search" type="search" data-i18n-placeholder="search.placeholder" placeholder="Search mods, heroes, authors..." /></label><button id="refresh" class="refresh-button" data-i18n-title="catalog.refresh" title="Refresh catalog">↻ <span data-i18n="catalog.refresh">Refresh catalog</span></button></div></header>
+        <section id="content" class="content"></section>
+      </main>
+    </div>
+    <footer class="statusbar"><span id="status-dot" class="status-dot"></span><span id="status-text" data-i18n="settings.gameMissingStatus">Dota 2 not found — set the path in settings</span><span class="status-source" data-i18n="status.catalogGithub">CATALOG · GITHUB</span></footer>
+    <div id="toast" class="toast" role="status"></div>
+    <aside id="update-panel" class="update-panel" aria-live="polite" hidden></aside>
+    <dialog id="details" class="details-dialog"><button id="close-details" class="dialog-close" aria-label="Close">×</button><div id="details-content"></div></dialog>
+    <dialog id="video-preview" class="video-preview-dialog"><button id="close-video-preview" class="dialog-close" aria-label="Close">×</button><div id="video-preview-content"></div></dialog>
+    <script src="i18n.js"></script>
+    <script src="app.js"></script>
+    <script src="rarity-ui.js"></script>
+    <script src="library-unified-ui.js"></script>
+    <script src="hero-directory-fixes.js"></script>
+    <script src="hero-grids.js"></script>
+    <script src="guides-ui.js"></script>
+    <script src="author-search.js"></script>
+    <script src="settings-page.js"></script>
+    <script src="card-links.js"></script>
+    <script src="window-controls.js"></script>
+    <script src="card-polish.js"></script>
+    <script src="external-library-ui.js"></script>
+    <script src="library-bulk-ui.js"></script>
+    <script src="language-folders-ui.js"></script>
+    <script src="mods-navigation-memory.js"></script>
+    <script src="hero-enhancements.js"></script>
+    <script src="hero-multifilter.js"></script>
+    <script src="hero-simple.js"></script>
+    <script src="mod-card-state.js"></script>
+    <script src="preview-state.js"></script>
+    <script src="preview-downloads.js"></script>
+    <script src="video-preview.js"></script>
+    <script src="full-i18n.js"></script>
+    <script src="interface-translation.js"></script>
+    <script src="i18n-ui.js"></script>
+    <script src="navigation-polish.js"></script>
+    <script src="ui-requested-fixes.js"></script>
+  </body>
+</html>

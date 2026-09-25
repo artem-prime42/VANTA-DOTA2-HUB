@@ -1,0 +1,4 @@
+.library-filters { display: flex; gap: 7px; margin-top: 16px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+.library-filter { flex: 0 0 auto; padding: 8px 13px; color: var(--muted); border: 1px solid var(--line); border-radius: 5px; background: #151515; cursor: pointer; }
+.library-filter:hover, .library-filter.active { color: var(--text); border-color: #888; background: #292929; }
+@media (max-width: 780px) { .library-filters { max-width: calc(100vw - 44px); } }

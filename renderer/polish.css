@@ -1,0 +1,11 @@
+html, body { overflow-x: hidden; }
+body { overflow-y: auto; scrollbar-color: #666 #111; scrollbar-width: thin; }
+body::-webkit-scrollbar, .sidebar::-webkit-scrollbar { width: 9px; }
+body::-webkit-scrollbar-track, .sidebar::-webkit-scrollbar-track { background: #0d0d0d; border-left: 1px solid #202020; }
+body::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb { border: 2px solid #0d0d0d; border-radius: 8px; background: #555; }
+body::-webkit-scrollbar-thumb:hover, .sidebar::-webkit-scrollbar-thumb:hover { background: #888; }
+.titlebar { position: fixed; top: 0; right: 0; left: 0; z-index: 20; -webkit-app-region: drag; }
+.titlebar-brand, .top-nav, .window-actions { -webkit-app-region: no-drag; }
+.app-shell { padding-top: 64px; }
+.window-actions button { transition: color .18s ease, background .18s ease; }.window-actions button:hover { background: #252525; }.window-actions .window-close:hover { color: #fff; background: #8b2e2e; }
+.card-body { padding: 13px 14px 14px; }.card-author { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 1px 0 10px; }.author-link { display: inline-flex; align-items: center; min-width: 0; gap: 7px; padding: 0; overflow: hidden; color: #ddd; border: 0; background: transparent; }.author-link:hover { color: #fff; }.author-link img, .author-fallback { display: grid; flex: 0 0 23px; place-items: center; width: 23px; height: 23px; color: #111; border-radius: 50%; background: #d5d5d5; object-fit: cover; font-size: 10px; font-weight: 700; }.author-link span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.download-count { flex: 0 0 auto; color: #858585; font-size: 10px; }.card-chips { display: flex; flex-wrap: wrap; gap: 5px; min-height: 24px; }.card-chip { padding: 4px 7px; color: #aaa; border: 1px solid #393939; border-radius: 3px; background: #202020; font-size: 10px; transition: color .18s ease, border-color .18s ease, background .18s ease; }.card-chip:hover { color: #fff; border-color: #888; background: #303030; }.card-date { margin: 9px 0 12px; color: #777; font-size: 11px; }.card-footer { border-top: 1px solid #272727; padding-top: 11px; }

@@ -1,0 +1,6 @@
+.rarity-badge { position: absolute; top: 12px; left: 12px; z-index: 4; display: inline-flex; align-items: center; min-height: 26px; padding: 4px 10px; border: 1px solid currentColor; border-radius: 999px; font: 700 11px 'Space Grotesk'; letter-spacing: .08em; line-height: 1; text-shadow: 0 1px 8px #0008; box-shadow: 0 4px 14px #0008, inset 0 1px #fff5; pointer-events: none; }
+.rarity-arcana { color: #7dffb0; background: #123b2a99; box-shadow: 0 0 16px #48e58a55, inset 0 1px #d8ffe555; }
+.rarity-immortal { color: #ffd45a; background: #5a3c1299; box-shadow: 0 0 16px #e3b34255, inset 0 1px #fff1a855; }
+#details-content { position: relative; }
+#details-content > .rarity-badge { top: 14px; left: 14px; }
+.open-card { position: relative; }

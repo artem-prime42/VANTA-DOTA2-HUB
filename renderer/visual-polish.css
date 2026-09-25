@@ -1,0 +1,12 @@
+html { scrollbar-width: thin; scrollbar-color: #777 #0d0d0d; }
+html::-webkit-scrollbar, body::-webkit-scrollbar, .sidebar::-webkit-scrollbar { width: 10px; height: 10px; }
+html::-webkit-scrollbar-track, body::-webkit-scrollbar-track, .sidebar::-webkit-scrollbar-track { background: #0d0d0d; }
+html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb { border: 2px solid #0d0d0d; border-radius: 10px; background: linear-gradient(#777, #444); }
+html::-webkit-scrollbar-thumb:hover, body::-webkit-scrollbar-thumb:hover, .sidebar::-webkit-scrollbar-thumb:hover { background: #aaa; }
+.refresh-button { display: none !important; }
+.hero-card { min-height: 170px; }
+.hero-card[role="button"] { cursor: pointer; }
+.hero-directory-tools { display: grid; gap: 12px; margin-top: 20px; }.hero-directory-search { display: flex; gap: 8px; align-items: center; max-width: 430px; padding: 10px 12px; color: #999; border: 1px solid #333; border-radius: 6px; background: #121212; }.hero-directory-search input { width: 100%; color: #eee; border: 0; outline: 0; background: transparent; }.hero-directory-filters { display: flex; flex-wrap: wrap; gap: 7px; }.hero-directory-filters .filter { text-transform: capitalize; }
+.hero-downloads { position: absolute; right: 12px; bottom: 12px; z-index: 2; padding: 6px 9px; color: #eee; border: 1px solid #666; border-radius: 4px; background: #111c; font-size: 10px; transition: background .2s, transform .2s; }.hero-downloads:hover { background: #333; transform: translateY(-2px); }
+.hero-stats-dialog { width: min(420px, calc(100vw - 40px)); color: #eee; border: 1px solid #555; border-radius: 9px; background: #171717; box-shadow: 0 25px 80px #000c; }.hero-stats-dialog::backdrop { background: #000a; }.hero-stats-body { padding: 26px; }.hero-stats-body h2 { margin: 0 0 20px; font: 600 26px 'Space Grotesk'; text-transform: capitalize; }.hero-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }.hero-stat-grid strong { padding: 12px 8px; border: 1px solid #333; border-radius: 6px; background: #222; font: 600 18px 'Space Grotesk'; text-align: center; }.hero-stat-grid small { display: block; margin-top: 6px; color: #999; font: 10px 'DM Sans'; }
+#settings-refresh-catalog { margin-top: 16px; }

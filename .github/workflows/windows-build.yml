@@ -1,0 +1,84 @@
+name: Windows build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Use HTTPS for git dependencies
+        shell: bash
+        run: |
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check source
+        run: npm run check
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build Windows installer
+        run: npm run build:win
+
+      - name: Verify Windows update metadata
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem "dist/VANTA-Setup-*.exe" | Where-Object { $_.Name -notlike "*uninstaller*" } | Select-Object -First 1
+          if (!$installer) { throw "Windows installer was not generated" }
+          if (!(Test-Path "dist/latest.yml")) { throw "latest.yml was not generated" }
+          if (!(Get-ChildItem "dist/*.blockmap")) { throw "Windows blockmap was not generated" }
+          $metadata = Get-Content "dist/latest.yml" -Raw
+          $version = node -p "require('./package.json').version"
+          if ($metadata -notmatch "version: $version") { throw "latest.yml has an unexpected version" }
+          if ($metadata -notmatch "sha512:\s+\S+") { throw "latest.yml has no sha512" }
+          if ($metadata -notmatch "path:\s+\S+") { throw "latest.yml has no artifact path" }
+
+      - name: Verify install and uninstall lifecycle
+        shell: pwsh
+        run: |
+          $installer = (Resolve-Path "dist/VANTA-Setup-*.exe").Path
+          $installDir = Join-Path $env:RUNNER_TEMP "VANTA-install"
+          $userDataDir = Join-Path $env:APPDATA "VANTA"
+          Remove-Item $installDir -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item $userDataDir -Recurse -Force -ErrorAction SilentlyContinue
+          Start-Process -FilePath $installer -ArgumentList "/S", "/D=$installDir" -Wait
+          $app = Join-Path $installDir "VANTA.exe"
+          $uninstaller = Join-Path $installDir "Uninstall VANTA.exe"
+          if (!(Test-Path $app)) { throw "VANTA.exe was not installed" }
+          if (!(Test-Path $uninstaller)) { throw "Uninstaller was not generated" }
+          New-Item $userDataDir -ItemType Directory -Force | Out-Null
+          Set-Content (Join-Path $userDataDir "lifecycle-marker.txt") "preserve"
+          Get-Process VANTA -ErrorAction SilentlyContinue | Stop-Process -Force
+          Start-Process -FilePath $uninstaller -ArgumentList "/S" -Wait
+          if (Test-Path $installDir) { throw "Install directory still exists after uninstall" }
+          if (!(Test-Path (Join-Path $userDataDir "lifecycle-marker.txt"))) { throw "User data was removed during uninstall" }
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: VANTA-Windows-${{ github.sha }}
+          path: |
+            dist/VANTA-Setup-*.exe
+            dist/VANTA-Setup-*.blockmap
+          if-no-files-found: error

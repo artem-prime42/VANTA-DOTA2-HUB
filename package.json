@@ -1,0 +1,111 @@
+{
+  "name": "vanta-dota",
+  "productName": "VANTA",
+  "desktopName": "vanta",
+  "version": "2.0.2",
+  "description": "Independent Dota 2 mod manager with a remote catalog.",
+  "author": {
+    "name": "VANTA",
+    "email": "artem-prime42@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/artem-prime42/Vanta-Dota2-Hub.git"
+  },
+  "main": "src/main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test",
+    "check": "node --check src/main/index.js && node --check src/main/services/app-service.js",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win nsis",
+    "build:win:linux-smoke": "electron-builder --win nsis --config.npmRebuild=false",
+    "build:linux": "electron-builder --linux AppImage",
+    "build:local": "electron-builder --win nsis --linux AppImage --config.npmRebuild=false",
+    "dist:linux": "npm run build:linux",
+    "dist:win": "npm run build:win",
+    "release:win": "electron-builder --win nsis --publish always",
+    "release:linux": "electron-builder --linux AppImage --publish always"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "discord-rpc": "^4.0.1",
+    "electron-updater": "^6.8.9",
+    "vpk-tools": "^1.0.3"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.vanta.dota",
+    "productName": "VANTA",
+    "executableName": "VANTA",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "renderer/**/*",
+      "package.json"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "artem-prime42",
+        "repo": "Vanta-Dota2-Hub",
+        "releaseType": "release"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/installer/vanta.ico",
+      "artifactName": "VANTA-Setup-${version}.${ext}",
+      "publish": ["github"]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/installer/vanta.png",
+      "artifactName": "VANTA-${version}.${ext}",
+      "category": "Utility",
+      "synopsis": "Dota 2 Mod Manager",
+      "description": "Independent Dota 2 mod manager with a remote catalog.",
+      "publish": ["github"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": true,
+      "shortcutName": "VANTA",
+      "menuCategory": "VANTA",
+      "installerLanguages": [
+        "en_US",
+        "ru"
+      ],
+      "installerIcon": "build/installer/vanta.ico",
+      "uninstallerIcon": "build/installer/vanta.ico",
+      "installerHeaderIcon": "build/installer/vanta-header.bmp",
+      "installerSidebar": "build/installer/vanta-sidebar.bmp",
+      "uninstallerSidebar": "build/installer/vanta-sidebar.bmp",
+      "include": "build/installer/desktop-shortcut.nsh",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
+    }
+  }
+}

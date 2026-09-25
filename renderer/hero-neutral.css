@@ -1,0 +1,8 @@
+.hero-category-button:hover { color: #fff; border-color: #aaa; background: #2b2b2b; }
+.hero-category-button.active { color: #fff; border-color: #fff; background: #303030; box-shadow: 0 0 0 1px #fff2, 0 4px 14px #0008; }
+.hero-directory-filters .filter:hover, .hero-directory-filters .filter.active { color: #fff; border-color: #aaa; background: #2b2b2b; box-shadow: none; }
+.hero-downloads { color: #fff; border-color: #777; background: #181818; box-shadow: 0 4px 14px #0008; }
+.hero-downloads:hover { color: #fff; border-color: #bbb; background: #333; box-shadow: 0 6px 18px #000b; }
+.hero-downloads::before { content: none; }
+.hero-stat-grid strong:first-child small { font-size: 10px; }
+.hero-stat-grid strong:first-child small::before { content: none; }

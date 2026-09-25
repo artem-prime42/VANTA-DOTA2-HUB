@@ -1,0 +1,55 @@
+name: Linux AppImage build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check source
+        run: npm run check
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build AppImage
+        run: npm run build:linux
+
+      - name: Verify Linux update metadata
+        shell: bash
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          test -f "dist/VANTA-${version}.AppImage"
+          test -f dist/latest-linux.yml
+          grep -Eq "^version: ${version}$" dist/latest-linux.yml
+          grep -Eq '^sha512: [^[:space:]]+$' dist/latest-linux.yml
+          grep -Eq '^path: [^[:space:]]+$' dist/latest-linux.yml
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: VANTA-Linux-${{ github.sha }}
+          path: |
+            dist/VANTA-*.AppImage
+            dist/latest-linux.yml
+          if-no-files-found: error

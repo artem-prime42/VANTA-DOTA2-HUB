@@ -1,0 +1,34 @@
+.hero-grids-page { display: grid; gap: 18px; }
+.hero-grids-heading { display: flex; align-items: end; justify-content: space-between; gap: 18px; }
+.hero-grids-heading h2 { margin: 0 0 7px; font: 600 27px 'Space Grotesk'; }
+.hero-grids-heading p:not(.eyebrow) { margin: 0; color: var(--muted); }
+.hero-grid-patch { display: grid; gap: 7px; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.hero-grid-patch select { min-width: 120px; padding: 9px 12px; color: var(--text); border: 1px solid var(--line); border-radius: 5px; background: var(--panel); }
+.hero-grids-note { padding: 12px 14px; color: var(--muted); border-left: 2px solid var(--accent); background: #141414; }
+.hero-grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
+.hero-grid-card { display: flex; min-width: 0; flex-direction: column; padding: 17px; border: 1px solid var(--line); border-radius: 7px; background: linear-gradient(145deg, #1b1b1b, #101010); }
+.hero-grid-card.is-selected { border-color: #a8c7a8; box-shadow: 0 0 0 1px #a8c7a844; }
+.hero-grid-card-head { display: flex; align-items: start; justify-content: space-between; gap: 12px; min-height: 64px; }
+.hero-grid-card-head h3 { margin: 0 0 5px; font: 600 17px 'Space Grotesk'; }
+.hero-grid-card-head span { color: var(--muted); font-size: 12px; }
+.hero-grid-selected { flex: 0 0 auto; color: #b7ddb7; font-size: 11px; }
+.hero-grid-mode { display: flex; gap: 7px; margin: 15px 0 13px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.02); }
+.hero-grid-mode .filter { flex: 1; border-radius: 999px; }
+.hero-grid-mode .filter.is-installed { color: #c8e8c8; border-color: #91bd91; box-shadow: inset 0 0 0 1px #91bd9144; }
+.hero-grid-preview { display: grid; gap: 10px; min-height: 240px; padding: 12px; border: 1px solid #303030; border-radius: 6px; background: #0c0c0c; }
+.hero-grid-preview-row { display: grid; gap: 6px; }
+.hero-grid-preview-row > strong { color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.hero-grid-preview-heroes { display: grid; grid-template-columns: repeat(auto-fit, minmax(52px, 1fr)); gap: 5px; }
+.hero-grid-tile { position: relative; min-width: 0; aspect-ratio: 1.45; overflow: hidden; border: 1px solid #333; background: #202020; }
+.hero-grid-tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hero-grid-tile span { position: absolute; right: 0; bottom: 0; left: 0; overflow: hidden; padding: 3px 4px; color: #fff; background: #000b; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.hero-grid-apply { width: 100%; margin-top: 14px; }
+.hero-grid-user-section { display: grid; gap: 14px; padding-top: 8px; border-top: 1px solid var(--line); }
+.hero-grid-user-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; }
+.hero-grid-user-head h3 { margin: 0 0 5px; font: 600 19px 'Space Grotesk'; }
+.hero-grid-user-head p:not(.eyebrow) { margin: 0; color: var(--muted); }
+.hero-grid-user-list { display: grid; gap: 8px; }
+.hero-grid-user-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 13px; border: 1px solid var(--line); border-radius: 5px; background: #141414; }
+.hero-grid-user-item .hero-grid-user-delete { margin-left: auto; }
+.hero-grid-user-item small, .hero-grid-user-empty { color: var(--muted); }
+@media (max-width: 780px) { .hero-grids-heading { align-items: start; flex-direction: column; }.hero-grid-cards { grid-template-columns: 1fr; }.hero-grid-card { padding: 13px; } }
